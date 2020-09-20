@@ -3897,7 +3897,7 @@ FlexBox.defaultProps = {
 };
 
 function _templateObject$2() {
-  var data = _taggedTemplateLiteral(["\n  background: ", ";\n  border: 2px solid ", ";\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  margin-bottom: 1rem;\n  padding: 1.5rem 2rem;\n"]);
+  var data = _taggedTemplateLiteral(["\n  background: ", ";\n  // border: 2px solid ", ";\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  margin-bottom: 1rem;\n  padding: 1.5rem 2rem;\n"]);
 
   _templateObject$2 = function _templateObject() {
     return data;
@@ -4508,13 +4508,13 @@ function MultiImageInput(_ref) {
     }, images[index] ? React__default.createElement(React__default.Fragment, null, React__default.createElement(ImageOverlay, null, React__default.createElement(Image, {
       alt: "uploaded image".concat(index),
       src: images[index]
-    })), React__default.createElement(ImageOptionsWrapper, null, React__default.createElement(EditIcon, {
+    })), React__default.createElement(ImageOptionsWrapper, null, allowCrop ? React__default.createElement(EditIcon, {
       "aria-label": "Edit Image ".concat(index),
       role: "button",
       onClick: function onClick(e) {
         return selectForCrop(e, index);
       }
-    }), React__default.createElement(DeleteIcon, {
+    }) : null, React__default.createElement(DeleteIcon, {
       "aria-label": "Delete Image ".concat(index),
       role: "button",
       onClick: function onClick(e) {
