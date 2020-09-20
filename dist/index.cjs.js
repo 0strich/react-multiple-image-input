@@ -4245,10 +4245,11 @@ function MultiImageInput(_ref) {
       setImages = _ref.setImages,
       files = _ref.files,
       setFiles = _ref.setFiles,
+      addImageString = _ref.addImageString,
       cropConfig = _ref.cropConfig,
       max = _ref.max,
       allowCrop = _ref.allowCrop,
-      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "cropConfig", "max", "allowCrop"]);
+      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "addImageString", "cropConfig", "max", "allowCrop"]);
 
   var _useState = React.useState(Object.keys(images).length < max ? Object.keys(images).length : max),
       _useState2 = _slicedToArray(_useState, 2),
@@ -4324,18 +4325,17 @@ function MultiImageInput(_ref) {
               }
 
               if (props.handleError) {
-                props.handleError("You cannot upload more than ".concat(max, " ").concat(max > 1 ? 'images' : 'image'));
+                props.handleError("\uC774\uBBF8\uC9C0 \uCD5C\uB300 \uB4F1\uB85D \uAC2F\uC218\uB97C \uCD08\uACFC\uD588\uC2B5\uB2C8\uB2E4 (\uCD5C\uB300 ".concat(max, "\uAC1C)"));
               } else {
-                alert("You cannot upload more than ".concat(max, " ").concat(max > 1 ? 'images' : 'image'));
+                alert("\uC774\uBBF8\uC9C0 \uCD5C\uB300 \uB4F1\uB85D \uAC2F\uC218\uB97C \uCD08\uACFC\uD588\uC2B5\uB2C8\uB2E4 (\uCD5C\uB300 ".concat(max, "\uAC1C)"));
               }
 
               return _context.abrupt("return");
 
             case 6:
               selectedFiles = Array.from(e.target.files);
-              console.log("selected ===> ", e.target.files);
               setFiles([].concat(_toConsumableArray(files), [selectedFiles[0]]));
-              _context.next = 11;
+              _context.next = 10;
               return Promise.all(selectedFiles.map(function (f) {
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
@@ -4368,7 +4368,7 @@ function MultiImageInput(_ref) {
                 });
               }));
 
-            case 11:
+            case 10:
               imageURIs = _context.sent;
               imageUrisObject = {};
 
@@ -4384,11 +4384,11 @@ function MultiImageInput(_ref) {
                 setOriginalFiles(_objectSpread2({}, originalFiles, {}, imageUrisObject));
               }
 
-              _context.next = 21;
+              _context.next = 20;
               break;
 
-            case 18:
-              _context.prev = 18;
+            case 17:
+              _context.prev = 17;
               _context.t0 = _context["catch"](0);
 
               if (props.handleError) {
@@ -4397,12 +4397,12 @@ function MultiImageInput(_ref) {
                 alert(_context.t0);
               }
 
-            case 21:
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 18]]);
+      }, _callee, null, [[0, 17]]);
     }));
 
     return function handleFileChange(_x, _x2) {
@@ -4541,7 +4541,7 @@ function MultiImageInput(_ref) {
       style: {
         display: 'block'
       }
-    }, "\uC774\uBBF8\uC9C0 \uCD94\uAC00")), React__default.createElement("input", {
+    }, addImageString)), React__default.createElement("input", {
       type: "file",
       multiple: true,
       onChange: function onChange(e) {
@@ -4584,6 +4584,7 @@ MultiImageInput.propTypes = {
   setImages: propTypes.func.isRequired,
   files: propTypes.array.isRequired,
   setFiles: propTypes.func.isRequired,
+  addImageText: propTypes.string,
   allowCrop: propTypes.bool,
   max: propTypes.number,
   theme: propTypes.oneOfType([propTypes.object, propTypes.string]),

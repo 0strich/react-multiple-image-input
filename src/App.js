@@ -14,7 +14,7 @@ function App() {
           setImages={setImages}
           files={files}
           setFiles={setFiles}
-          addImageString={"이미지 추가"}
+          addImageText={"이미지 추가"}
           max={4}
           allowCrop={false}
         />

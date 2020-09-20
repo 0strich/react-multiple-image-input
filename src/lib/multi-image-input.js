@@ -21,7 +21,7 @@ export default function MultiImageInput({
   setImages, 
   files,
   setFiles,
-  addImageString,
+  addImageText,
   cropConfig,
   max,
   allowCrop,
@@ -300,7 +300,7 @@ export default function MultiImageInput({
                     color="outlineColor"
                     style={{ display: 'block' }}
                   >
-                    {addImageString}
+                    {addImageText}
                   </Text>
                 </div>
               )}
