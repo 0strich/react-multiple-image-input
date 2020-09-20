@@ -1,7 +1,7 @@
 {
-  "name": "react-multiple-image-input",
+  "name": "react-multiple-image-input-gyu-dong",
   "description": "A package for uploading multiple images at a time in react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/codenaz/react-multiple-image-input"
+    "url": "https://github.com/0strich/react-multiple-image-input"
   },
   "keywords": [
     "react",
@@ -18,8 +18,8 @@
     "uploader"
   ],
   "author": {
-    "name": "Nwakwoke Patrick",
-    "email": "patricknwak@gmail.com"
+    "name": "0strich",
+    "email": "gee8196@gmail.com"
   },
   "license": "MIT",
   "peerDependencies": {
