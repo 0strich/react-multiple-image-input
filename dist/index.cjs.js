@@ -4245,11 +4245,11 @@ function MultiImageInput(_ref) {
       setImages = _ref.setImages,
       files = _ref.files,
       setFiles = _ref.setFiles,
-      addImageString = _ref.addImageString,
+      addImageText = _ref.addImageText,
       cropConfig = _ref.cropConfig,
       max = _ref.max,
       allowCrop = _ref.allowCrop,
-      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "addImageString", "cropConfig", "max", "allowCrop"]);
+      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "addImageText", "cropConfig", "max", "allowCrop"]);
 
   var _useState = React.useState(Object.keys(images).length < max ? Object.keys(images).length : max),
       _useState2 = _slicedToArray(_useState, 2),
@@ -4541,7 +4541,7 @@ function MultiImageInput(_ref) {
       style: {
         display: 'block'
       }
-    }, addImageString)), React__default.createElement("input", {
+    }, addImageText)), React__default.createElement("input", {
       type: "file",
       multiple: true,
       onChange: function onChange(e) {

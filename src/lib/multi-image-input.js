@@ -271,11 +271,13 @@ export default function MultiImageInput({
                     <Image alt={`uploaded image${index}`} src={images[index]} />
                   </ImageOverlay>
                   <ImageOptionsWrapper>
-                    <EditIcon
-                      aria-label={`Edit Image ${index}`}
-                      role="button"
-                      onClick={e => selectForCrop(e, index)}
-                    />
+                    {allowCrop ? (
+                      <EditIcon
+                        aria-label={`Edit Image ${index}`}
+                        role="button"
+                        onClick={e => selectForCrop(e, index)}
+                      />
+                    ) : null}
                     <DeleteIcon
                       aria-label={`Delete Image ${index}`}
                       role="button"

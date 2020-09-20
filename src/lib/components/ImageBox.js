@@ -3,7 +3,7 @@ import FlexBox from './FlexBox';
 
 const ImageBox = styled(FlexBox)`
   background: ${props => props.theme.colors.background};
-  border: 2px solid ${props => props.theme.colors.outlineColor};
+  // border: 2px solid ${props => props.theme.colors.outlineColor};
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
