@@ -176,8 +176,24 @@ function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
 
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
@@ -208,6 +224,10 @@ function _iterableToArrayLimit(arr, i) {
   }
 
   return _arr;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
 function _nonIterableRest() {
@@ -4228,7 +4248,7 @@ function MultiImageInput(_ref) {
       cropConfig = _ref.cropConfig,
       max = _ref.max,
       allowCrop = _ref.allowCrop,
-      props = _objectWithoutProperties(_ref, ["images", "setImages", "cropConfig", "max", "allowCrop"]);
+      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "cropConfig", "max", "allowCrop"]);
 
   var _useState = React.useState(Object.keys(images).length < max ? Object.keys(images).length : max),
       _useState2 = _slicedToArray(_useState, 2),
@@ -4313,8 +4333,9 @@ function MultiImageInput(_ref) {
 
             case 6:
               selectedFiles = Array.from(e.target.files);
-              _context.next = 9;
-              setFiles(files.push(selectedFiles[0]));
+              console.log("selected ===> ", e.target.files);
+              setFiles([].concat(_toConsumableArray(files), [selectedFiles[0]]));
+              _context.next = 11;
               return Promise.all(selectedFiles.map(function (f) {
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
@@ -4347,7 +4368,7 @@ function MultiImageInput(_ref) {
                 });
               }));
 
-            case 9:
+            case 11:
               imageURIs = _context.sent;
               imageUrisObject = {};
 
@@ -4363,11 +4384,11 @@ function MultiImageInput(_ref) {
                 setOriginalFiles(_objectSpread2({}, originalFiles, {}, imageUrisObject));
               }
 
-              _context.next = 19;
+              _context.next = 21;
               break;
 
-            case 16:
-              _context.prev = 16;
+            case 18:
+              _context.prev = 18;
               _context.t0 = _context["catch"](0);
 
               if (props.handleError) {
@@ -4376,12 +4397,12 @@ function MultiImageInput(_ref) {
                 alert(_context.t0);
               }
 
-            case 19:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 16]]);
+      }, _callee, null, [[0, 18]]);
     }));
 
     return function handleFileChange(_x, _x2) {
@@ -4437,7 +4458,6 @@ function MultiImageInput(_ref) {
     fileUploadRefs[index].current.value = '';
     var reIndexedFiles = {};
     var reIndexedOriginals = {};
-    
     files.splice(index, 1);
 
     for (var i = index - 1; i >= 0; i--) {
@@ -4516,12 +4536,12 @@ function MultiImageInput(_ref) {
       width: 58,
       height: 46
     }), React__default.createElement(Text, {
-      fontSize: "small",
+      fontSize: "middle",
       color: "outlineColor",
       style: {
         display: 'block'
       }
-    }, "이미지 추가")), React__default.createElement("input", {
+    }, "\uC774\uBBF8\uC9C0 \uCD94\uAC00")), React__default.createElement("input", {
       type: "file",
       multiple: true,
       onChange: function onChange(e) {
@@ -4550,7 +4570,7 @@ function MultiImageInput(_ref) {
 }
 MultiImageInput.defaultProps = {
   max: 3,
-  theme: 'dark',
+  theme: 'light',
   allowCrop: true,
   cropConfig: {
     maxWidth: 800,

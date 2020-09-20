@@ -171,8 +171,24 @@ function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
 
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
@@ -203,6 +219,10 @@ function _iterableToArrayLimit(arr, i) {
   }
 
   return _arr;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
 function _nonIterableRest() {
@@ -4216,19 +4236,21 @@ var css$1 = ".ReactCrop {\n  position: relative;\n  display: inline-block;\n  cu
 styleInject(css$1);
 
 function MultiImageInput(_ref) {
-  var files = _ref.images,
-      setFiles = _ref.setImages,
+  var images = _ref.images,
+      setImages = _ref.setImages,
+      files = _ref.files,
+      setFiles = _ref.setFiles,
       cropConfig = _ref.cropConfig,
       max = _ref.max,
       allowCrop = _ref.allowCrop,
-      props = _objectWithoutProperties(_ref, ["images", "setImages", "cropConfig", "max", "allowCrop"]);
+      props = _objectWithoutProperties(_ref, ["images", "setImages", "files", "setFiles", "cropConfig", "max", "allowCrop"]);
 
-  var _useState = useState(Object.keys(files).length < max ? Object.keys(files).length : max),
+  var _useState = useState(Object.keys(images).length < max ? Object.keys(images).length : max),
       _useState2 = _slicedToArray(_useState, 2),
       numberOfImages = _useState2[0],
       setNumberOfImages = _useState2[1];
 
-  var _useState3 = useState(files),
+  var _useState3 = useState(images),
       _useState4 = _slicedToArray(_useState3, 2),
       originalFiles = _useState4[0],
       setOriginalFiles = _useState4[1];
@@ -4267,14 +4289,14 @@ function MultiImageInput(_ref) {
     setFileUploadRefs(fileUploadRefsCopy);
   }, [numberOfImages]);
   useEffect(function () {
-    var imageCount = Object.keys(files).length;
+    var imageCount = Object.keys(images).length;
 
     if (imageCount < max) {
-      setNumberOfImages(Object.keys(files).length + 1);
+      setNumberOfImages(Object.keys(images).length + 1);
     } else {
-      setNumberOfImages(Object.keys(files).length);
+      setNumberOfImages(Object.keys(images).length);
     }
-  }, [files, max]);
+  }, [images, max]);
 
   var handleFileChange =
   /*#__PURE__*/
@@ -4289,7 +4311,7 @@ function MultiImageInput(_ref) {
             case 0:
               _context.prev = 0;
               e.preventDefault();
-              maxAllowedImages = max - Object.keys(files).length;
+              maxAllowedImages = max - Object.keys(images).length;
 
               if (!(e.target.files.length > maxAllowedImages)) {
                 _context.next = 6;
@@ -4306,7 +4328,9 @@ function MultiImageInput(_ref) {
 
             case 6:
               selectedFiles = Array.from(e.target.files);
-              _context.next = 9;
+              console.log("selected ===> ", e.target.files);
+              setFiles([].concat(_toConsumableArray(files), [selectedFiles[0]]));
+              _context.next = 11;
               return Promise.all(selectedFiles.map(function (f) {
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
@@ -4339,7 +4363,7 @@ function MultiImageInput(_ref) {
                 });
               }));
 
-            case 9:
+            case 11:
               imageURIs = _context.sent;
               imageUrisObject = {};
 
@@ -4348,18 +4372,18 @@ function MultiImageInput(_ref) {
                 currentFileInputIndex.current = i;
               }
 
-              setFiles(_objectSpread2({}, files, {}, imageUrisObject));
+              setImages(_objectSpread2({}, images, {}, imageUrisObject));
 
               if (allowCrop) {
                 setCurrentImage(imageUrisObject[index + imageURIs.length - 1]);
                 setOriginalFiles(_objectSpread2({}, originalFiles, {}, imageUrisObject));
               }
 
-              _context.next = 19;
+              _context.next = 21;
               break;
 
-            case 16:
-              _context.prev = 16;
+            case 18:
+              _context.prev = 18;
               _context.t0 = _context["catch"](0);
 
               if (props.handleError) {
@@ -4368,12 +4392,12 @@ function MultiImageInput(_ref) {
                 alert(_context.t0);
               }
 
-            case 19:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 16]]);
+      }, _callee, null, [[0, 18]]);
     }));
 
     return function handleFileChange(_x, _x2) {
@@ -4399,7 +4423,7 @@ function MultiImageInput(_ref) {
 
     if (imageRef && imageRef.width && imageRef.height) {
       var base64Image = getCroppedImage(imageRef, crop);
-      setFiles(_objectSpread2({}, files, _defineProperty({}, currentFileInputIndex.current, base64Image)));
+      setImages(_objectSpread2({}, images, _defineProperty({}, currentFileInputIndex.current, base64Image)));
     }
   };
 
@@ -4429,18 +4453,19 @@ function MultiImageInput(_ref) {
     fileUploadRefs[index].current.value = '';
     var reIndexedFiles = {};
     var reIndexedOriginals = {};
+    files.splice(index, 1);
 
     for (var i = index - 1; i >= 0; i--) {
-      reIndexedFiles[i] = files[i];
+      reIndexedFiles[i] = images[i];
 
       if (allowCrop) {
         reIndexedOriginals[i] = originalFiles[i];
       }
     }
 
-    if (Object.keys(files).length === max) {
+    if (Object.keys(images).length === max) {
       for (var _i = index; _i < numberOfImages - 1; _i++) {
-        reIndexedFiles[_i] = files[_i + 1];
+        reIndexedFiles[_i] = images[_i + 1];
 
         if (allowCrop) {
           reIndexedOriginals[_i] = originalFiles[_i + 1];
@@ -4448,7 +4473,7 @@ function MultiImageInput(_ref) {
       }
     } else {
       for (var _i2 = index; _i2 < numberOfImages - 2; _i2++) {
-        reIndexedFiles[_i2] = files[_i2 + 1];
+        reIndexedFiles[_i2] = images[_i2 + 1];
 
         if (allowCrop) {
           reIndexedOriginals[_i2] = originalFiles[_i2 + 1];
@@ -4456,7 +4481,8 @@ function MultiImageInput(_ref) {
       }
     }
 
-    setFiles(reIndexedFiles);
+    setFiles(files);
+    setImages(reIndexedFiles);
 
     if (allowCrop) {
       setOriginalFiles(reIndexedOriginals);
@@ -4474,9 +4500,9 @@ function MultiImageInput(_ref) {
   }, React__default.createElement(ImageBox, null, Array(numberOfImages).fill().map(function (_, index) {
     return React__default.createElement(ImageInput, {
       key: index
-    }, files[index] ? React__default.createElement(React__default.Fragment, null, React__default.createElement(ImageOverlay, null, React__default.createElement(Image, {
+    }, images[index] ? React__default.createElement(React__default.Fragment, null, React__default.createElement(ImageOverlay, null, React__default.createElement(Image, {
       alt: "uploaded image".concat(index),
-      src: files[index]
+      src: images[index]
     })), React__default.createElement(ImageOptionsWrapper, null, React__default.createElement(EditIcon, {
       "aria-label": "Edit Image ".concat(index),
       role: "button",
@@ -4505,12 +4531,12 @@ function MultiImageInput(_ref) {
       width: 58,
       height: 46
     }), React__default.createElement(Text, {
-      fontSize: "small",
+      fontSize: "middle",
       color: "outlineColor",
       style: {
         display: 'block'
       }
-    }, "ADD IMAGE")), React__default.createElement("input", {
+    }, "\uC774\uBBF8\uC9C0 \uCD94\uAC00")), React__default.createElement("input", {
       type: "file",
       multiple: true,
       onChange: function onChange(e) {
@@ -4539,7 +4565,7 @@ function MultiImageInput(_ref) {
 }
 MultiImageInput.defaultProps = {
   max: 3,
-  theme: 'dark',
+  theme: 'light',
   allowCrop: true,
   cropConfig: {
     maxWidth: 800,
@@ -4551,6 +4577,8 @@ MultiImageInput.defaultProps = {
 MultiImageInput.propTypes = {
   images: propTypes.object.isRequired,
   setImages: propTypes.func.isRequired,
+  files: propTypes.array.isRequired,
+  setFiles: propTypes.func.isRequired,
   allowCrop: propTypes.bool,
   max: propTypes.number,
   theme: propTypes.oneOfType([propTypes.object, propTypes.string]),

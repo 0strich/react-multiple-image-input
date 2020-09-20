@@ -21,6 +21,7 @@ export default function MultiImageInput({
   setImages, 
   files,
   setFiles,
+  addImageString,
   cropConfig,
   max,
   allowCrop,
@@ -80,11 +81,11 @@ export default function MultiImageInput({
       if (e.target.files.length > maxAllowedImages) {
         if (props.handleError) {
           props.handleError(
-            `You cannot upload more than ${max} ${max > 1 ? 'images' : 'image'}`
+            `이미지 최대 등록 갯수를 초과했습니다 (최대 ${max}개)`
           );
         } else {
           alert(
-            `You cannot upload more than ${max} ${max > 1 ? 'images' : 'image'}`
+            `이미지 최대 등록 갯수를 초과했습니다 (최대 ${max}개)`
           );
         }
         return;
@@ -92,7 +93,6 @@ export default function MultiImageInput({
 
       const selectedFiles = Array.from(e.target.files);
 
-      console.log("selected ===> ", e.target.files)
       setFiles([...files, selectedFiles[0]])
 
       const imageURIs = await Promise.all(
@@ -300,7 +300,7 @@ export default function MultiImageInput({
                     color="outlineColor"
                     style={{ display: 'block' }}
                   >
-                    이미지 추가
+                    {addImageString}
                   </Text>
                 </div>
               )}
@@ -357,6 +357,7 @@ MultiImageInput.propTypes = {
   setImages: PropTypes.func.isRequired,
   files: PropTypes.array.isRequired,
   setFiles: PropTypes.func.isRequired,
+  addImageText: PropTypes.string, 
   allowCrop: PropTypes.bool,
   max: PropTypes.number,
   theme: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
