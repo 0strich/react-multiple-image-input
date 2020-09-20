@@ -4221,19 +4221,21 @@ var css$1 = ".ReactCrop {\n  position: relative;\n  display: inline-block;\n  cu
 styleInject(css$1);
 
 function MultiImageInput(_ref) {
-  var files = _ref.images,
-      setFiles = _ref.setImages,
+  var images = _ref.images,
+      setImages = _ref.setImages,
+      files = _ref.files,
+      setFiles = _ref.setFiles,
       cropConfig = _ref.cropConfig,
       max = _ref.max,
       allowCrop = _ref.allowCrop,
       props = _objectWithoutProperties(_ref, ["images", "setImages", "cropConfig", "max", "allowCrop"]);
 
-  var _useState = React.useState(Object.keys(files).length < max ? Object.keys(files).length : max),
+  var _useState = React.useState(Object.keys(images).length < max ? Object.keys(images).length : max),
       _useState2 = _slicedToArray(_useState, 2),
       numberOfImages = _useState2[0],
       setNumberOfImages = _useState2[1];
 
-  var _useState3 = React.useState(files),
+  var _useState3 = React.useState(images),
       _useState4 = _slicedToArray(_useState3, 2),
       originalFiles = _useState4[0],
       setOriginalFiles = _useState4[1];
@@ -4272,14 +4274,14 @@ function MultiImageInput(_ref) {
     setFileUploadRefs(fileUploadRefsCopy);
   }, [numberOfImages]);
   React.useEffect(function () {
-    var imageCount = Object.keys(files).length;
+    var imageCount = Object.keys(images).length;
 
     if (imageCount < max) {
-      setNumberOfImages(Object.keys(files).length + 1);
+      setNumberOfImages(Object.keys(images).length + 1);
     } else {
-      setNumberOfImages(Object.keys(files).length);
+      setNumberOfImages(Object.keys(images).length);
     }
-  }, [files, max]);
+  }, [images, max]);
 
   var handleFileChange =
   /*#__PURE__*/
@@ -4294,7 +4296,7 @@ function MultiImageInput(_ref) {
             case 0:
               _context.prev = 0;
               e.preventDefault();
-              maxAllowedImages = max - Object.keys(files).length;
+              maxAllowedImages = max - Object.keys(images).length;
 
               if (!(e.target.files.length > maxAllowedImages)) {
                 _context.next = 6;
@@ -4312,6 +4314,7 @@ function MultiImageInput(_ref) {
             case 6:
               selectedFiles = Array.from(e.target.files);
               _context.next = 9;
+              setFiles(files.push(selectedFiles[0]));
               return Promise.all(selectedFiles.map(function (f) {
                 return new Promise(function (resolve, reject) {
                   var reader = new FileReader();
@@ -4353,7 +4356,7 @@ function MultiImageInput(_ref) {
                 currentFileInputIndex.current = i;
               }
 
-              setFiles(_objectSpread2({}, files, {}, imageUrisObject));
+              setImages(_objectSpread2({}, images, {}, imageUrisObject));
 
               if (allowCrop) {
                 setCurrentImage(imageUrisObject[index + imageURIs.length - 1]);
@@ -4404,7 +4407,7 @@ function MultiImageInput(_ref) {
 
     if (imageRef && imageRef.width && imageRef.height) {
       var base64Image = getCroppedImage(imageRef, crop);
-      setFiles(_objectSpread2({}, files, _defineProperty({}, currentFileInputIndex.current, base64Image)));
+      setImages(_objectSpread2({}, images, _defineProperty({}, currentFileInputIndex.current, base64Image)));
     }
   };
 
@@ -4434,18 +4437,20 @@ function MultiImageInput(_ref) {
     fileUploadRefs[index].current.value = '';
     var reIndexedFiles = {};
     var reIndexedOriginals = {};
+    
+    files.splice(index, 1);
 
     for (var i = index - 1; i >= 0; i--) {
-      reIndexedFiles[i] = files[i];
+      reIndexedFiles[i] = images[i];
 
       if (allowCrop) {
         reIndexedOriginals[i] = originalFiles[i];
       }
     }
 
-    if (Object.keys(files).length === max) {
+    if (Object.keys(images).length === max) {
       for (var _i = index; _i < numberOfImages - 1; _i++) {
-        reIndexedFiles[_i] = files[_i + 1];
+        reIndexedFiles[_i] = images[_i + 1];
 
         if (allowCrop) {
           reIndexedOriginals[_i] = originalFiles[_i + 1];
@@ -4453,7 +4458,7 @@ function MultiImageInput(_ref) {
       }
     } else {
       for (var _i2 = index; _i2 < numberOfImages - 2; _i2++) {
-        reIndexedFiles[_i2] = files[_i2 + 1];
+        reIndexedFiles[_i2] = images[_i2 + 1];
 
         if (allowCrop) {
           reIndexedOriginals[_i2] = originalFiles[_i2 + 1];
@@ -4461,7 +4466,8 @@ function MultiImageInput(_ref) {
       }
     }
 
-    setFiles(reIndexedFiles);
+    setFiles(files);
+    setImages(reIndexedFiles);
 
     if (allowCrop) {
       setOriginalFiles(reIndexedOriginals);
@@ -4479,9 +4485,9 @@ function MultiImageInput(_ref) {
   }, React__default.createElement(ImageBox, null, Array(numberOfImages).fill().map(function (_, index) {
     return React__default.createElement(ImageInput, {
       key: index
-    }, files[index] ? React__default.createElement(React__default.Fragment, null, React__default.createElement(ImageOverlay, null, React__default.createElement(Image, {
+    }, images[index] ? React__default.createElement(React__default.Fragment, null, React__default.createElement(ImageOverlay, null, React__default.createElement(Image, {
       alt: "uploaded image".concat(index),
-      src: files[index]
+      src: images[index]
     })), React__default.createElement(ImageOptionsWrapper, null, React__default.createElement(EditIcon, {
       "aria-label": "Edit Image ".concat(index),
       role: "button",
@@ -4515,7 +4521,7 @@ function MultiImageInput(_ref) {
       style: {
         display: 'block'
       }
-    }, "ADD IMAGE")), React__default.createElement("input", {
+    }, "이미지 추가")), React__default.createElement("input", {
       type: "file",
       multiple: true,
       onChange: function onChange(e) {
@@ -4556,6 +4562,8 @@ MultiImageInput.defaultProps = {
 MultiImageInput.propTypes = {
   images: propTypes.object.isRequired,
   setImages: propTypes.func.isRequired,
+  files: propTypes.array.isRequired,
+  setFiles: propTypes.func.isRequired,
   allowCrop: propTypes.bool,
   max: propTypes.number,
   theme: propTypes.oneOfType([propTypes.object, propTypes.string]),

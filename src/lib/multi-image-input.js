@@ -17,18 +17,20 @@ import EditIcon from './components/EditIcon';
 import 'react-image-crop/dist/ReactCrop.css';
 
 export default function MultiImageInput({
-  images: files,
-  setImages: setFiles,
+  images,
+  setImages, 
+  files,
+  setFiles,
   cropConfig,
   max,
   allowCrop,
   ...props
 }) {
   const [numberOfImages, setNumberOfImages] = useState(
-    Object.keys(files).length < max ? Object.keys(files).length : max
+    Object.keys(images).length < max ? Object.keys(images).length : max
   );
 
-  const [originalFiles, setOriginalFiles] = useState(files);
+  const [originalFiles, setOriginalFiles] = useState(images);
 
   const [fileUploadRefs, setFileUploadRefs] = useState({});
 
@@ -61,19 +63,19 @@ export default function MultiImageInput({
   }, [numberOfImages]);
 
   useEffect(() => {
-    let imageCount = Object.keys(files).length;
+    let imageCount = Object.keys(images).length;
     if (imageCount < max) {
-      setNumberOfImages(Object.keys(files).length + 1);
+      setNumberOfImages(Object.keys(images).length + 1);
     } else {
-      setNumberOfImages(Object.keys(files).length);
+      setNumberOfImages(Object.keys(images).length);
     }
-  }, [files, max]);
+  }, [images, max]);
 
   const handleFileChange = async (e, index) => {
     try {
       e.preventDefault();
 
-      const maxAllowedImages = max - Object.keys(files).length;
+      const maxAllowedImages = max - Object.keys(images).length;
 
       if (e.target.files.length > maxAllowedImages) {
         if (props.handleError) {
@@ -89,6 +91,9 @@ export default function MultiImageInput({
       }
 
       const selectedFiles = Array.from(e.target.files);
+
+      console.log("selected ===> ", e.target.files)
+      setFiles([...files, selectedFiles[0]])
 
       const imageURIs = await Promise.all(
         selectedFiles.map(f => {
@@ -132,7 +137,7 @@ export default function MultiImageInput({
         currentFileInputIndex.current = i;
       }
 
-      setFiles({ ...files, ...imageUrisObject });
+      setImages({ ...images, ...imageUrisObject });
 
       if (allowCrop) {
         setCurrentImage(imageUrisObject[index + imageURIs.length - 1]);
@@ -165,7 +170,7 @@ export default function MultiImageInput({
     if (imageRef && imageRef.width && imageRef.height) {
       const base64Image = getCroppedImage(imageRef, crop);
 
-      setFiles({ ...files, [currentFileInputIndex.current]: base64Image });
+      setImages({ ...images, [currentFileInputIndex.current]: base64Image });
     }
   };
 
@@ -213,17 +218,18 @@ export default function MultiImageInput({
 
     const reIndexedFiles = {};
     const reIndexedOriginals = {};
+    files.splice(index, 1)
 
     for (let i = index - 1; i >= 0; i--) {
-      reIndexedFiles[i] = files[i];
+      reIndexedFiles[i] = images[i];
       if (allowCrop) {
         reIndexedOriginals[i] = originalFiles[i];
       }
     }
 
-    if (Object.keys(files).length === max) {
+    if (Object.keys(images).length === max) {
       for (let i = index; i < numberOfImages - 1; i++) {
-        reIndexedFiles[i] = files[i + 1];
+        reIndexedFiles[i] = images[i + 1];
 
         if (allowCrop) {
           reIndexedOriginals[i] = originalFiles[i + 1];
@@ -231,7 +237,7 @@ export default function MultiImageInput({
       }
     } else {
       for (let i = index; i < numberOfImages - 2; i++) {
-        reIndexedFiles[i] = files[i + 1];
+        reIndexedFiles[i] = images[i + 1];
 
         if (allowCrop) {
           reIndexedOriginals[i] = originalFiles[i + 1];
@@ -239,7 +245,8 @@ export default function MultiImageInput({
       }
     }
 
-    setFiles(reIndexedFiles);
+    setFiles(files);
+    setImages(reIndexedFiles);
 
     if (allowCrop) {
       setOriginalFiles(reIndexedOriginals);
@@ -258,10 +265,10 @@ export default function MultiImageInput({
           .fill()
           .map((_, index) => (
             <ImageInput key={index}>
-              {files[index] ? (
+              {images[index] ? (
                 <>
                   <ImageOverlay>
-                    <Image alt={`uploaded image${index}`} src={files[index]} />
+                    <Image alt={`uploaded image${index}`} src={images[index]} />
                   </ImageOverlay>
                   <ImageOptionsWrapper>
                     <EditIcon
@@ -289,11 +296,11 @@ export default function MultiImageInput({
                     height={46}
                   />
                   <Text
-                    fontSize="small"
+                    fontSize="middle"
                     color="outlineColor"
                     style={{ display: 'block' }}
                   >
-                    ADD IMAGE
+                    이미지 추가
                   </Text>
                 </div>
               )}
@@ -335,7 +342,7 @@ export default function MultiImageInput({
 
 MultiImageInput.defaultProps = {
   max: 3,
-  theme: 'dark',
+  theme: 'light',
   allowCrop: true,
   cropConfig: {
     maxWidth: 800,
@@ -348,6 +355,8 @@ MultiImageInput.defaultProps = {
 MultiImageInput.propTypes = {
   images: PropTypes.object.isRequired,
   setImages: PropTypes.func.isRequired,
+  files: PropTypes.array.isRequired,
+  setFiles: PropTypes.func.isRequired,
   allowCrop: PropTypes.bool,
   max: PropTypes.number,
   theme: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
