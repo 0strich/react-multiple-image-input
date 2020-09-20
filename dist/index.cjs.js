@@ -3897,7 +3897,7 @@ FlexBox.defaultProps = {
 };
 
 function _templateObject$2() {
-  var data = _taggedTemplateLiteral(["\n  background: ", ";\n  // border: 2px solid ", ";\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  margin-bottom: 1rem;\n  padding: 1.5rem 2rem;\n"]);
+  var data = _taggedTemplateLiteral(["\n  // background: ", ";\n  // border: 2px solid ", ";\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  margin-bottom: 1rem;\n  padding: 1.5rem 2rem;\n"]);
 
   _templateObject$2 = function _templateObject() {
     return data;

@@ -6,6 +6,8 @@ function App() {
   const [images, setImages] = useState({});
   const [files, setFiles] = useState([]);
 
+  console.log(files)
+
   return (
     <div className="App" style={{ maxWidth: '500px' }}>
       <header className="App-header">

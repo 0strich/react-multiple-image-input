@@ -93,7 +93,7 @@ export default function MultiImageInput({
 
       const selectedFiles = Array.from(e.target.files);
 
-      setFiles([...files, selectedFiles[0]])
+      setFiles([...files, ...selectedFiles])
 
       const imageURIs = await Promise.all(
         selectedFiles.map(f => {
